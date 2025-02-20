@@ -9,20 +9,28 @@ app = Flask(__name__)
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')  # Set this env var in your system.
 FROM_EMAIL = 'davidpountney2@gmail.com'
 TO_EMAILS = ['chrisatspeakerscorner@gmail.com', 'subwayheaven@gmail.com']  # List of recipients.
+TEMPLATE_ID = 'd-17dae4232dd14e3dab160592b0fdc73b'
 
 def send_email():
-    message = Mail(
-        from_email=FROM_EMAIL,
-        to_emails=TO_EMAILS,
-        subject='Automated Email Trigger',
-        html_content='<strong>This is a preconfigured email sent via SendGrid.</strong>'
-    )
     try:
         sg = SendGridAPIClient(SENDGRID_API_KEY)
+        
+        # Create email object with dynamic template
+        message = Mail(
+            from_email=FROM_EMAIL,
+            to_emails=TO_EMAILS
+        )
+        
+        # Attach template ID
+        message.template_id = TEMPLATE_ID
+
+        # Send the email
         response = sg.send(message)
-        print('Email sent:', response.status_code)
+        
+        return f"Email sent! Status Code: {response.status_code}"
+    
     except Exception as e:
-        print('Error sending email:', e)
+        return f"Failed to send email: {e}"
 
 @app.route('/send-email', methods=['POST'])
 def trigger_email():
