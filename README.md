@@ -1,6 +1,11 @@
 # eternalecho
 A program to detect when I'm dead and automate sending out useful emails to inform my family etc.
 
+ssh command is; ssh david@raspberrypi
+
+Service to send out predefined template emails;
+https://login.sendgrid.com/
+
 To check the web server is running correctly run this command through SSH;
 
 sudo systemctl status flask_app.service
